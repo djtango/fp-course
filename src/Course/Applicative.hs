@@ -347,8 +347,8 @@ replicateA ::
   Int
   -> k a
   -> k (List a)
-replicateA =
-  error "todo: Course.Applicative#replicateA"
+replicateA n ka =
+  sequence (replicate n ka)
 
 -- | Filter a list with a predicate that produces an effect.
 --
@@ -375,8 +375,18 @@ filtering ::
   (a -> k Bool)
   -> List a
   -> k (List a)
-filtering =
-  error "todo: Course.Applicative#filtering"
+filtering p xs =
+  -- f :: Bool -> a -> (List a) -> (List a)
+  let f a b tf =  if tf
+          then
+            a :. b
+          else
+            b
+  -- g :: a -> (List a) -> Bool -> (List a)
+      g a ys = lift2 (f a) ys (p a)
+  in foldRight g (pure Nil) xs
+
+
 
 -----------------------
 -- SUPPORT LIBRARIES --
