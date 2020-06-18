@@ -149,8 +149,8 @@ join kka =
   k a
   -> (a -> k b)
   -> k b
-(>>=) =
-  error "todo: Course.Monad#(>>=)"
+ka >>= f =
+  join (f <$> ka)
 
 infixl 1 >>=
 
