@@ -118,8 +118,10 @@ getFiles files =
 run ::
   FilePath
   -> IO ()
-run =
-  error "todo: Course.FileIO#run"
+run filePath =
+  getFile filePath >>= \(_, fileNames) ->
+    (getFiles $ lines fileNames) >>= \contents ->
+      printFiles contents
 
 -- /Tip:/ use @getArgs@ and @run@
 main ::
