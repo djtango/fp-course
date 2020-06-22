@@ -94,8 +94,8 @@ printFile filePath chars =
 printFiles ::
   List (FilePath, Chars)
   -> IO ()
-printFiles =
-  error "todo: Course.FileIO#printFiles"
+printFiles xs =
+  foldLeft (\b a -> b >>= \_ -> printFile (fst a) (snd a)) (pure ()) xs
 
 -- Given a file name, return (file name and file contents).
 -- Use @readFile@.
