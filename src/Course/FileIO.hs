@@ -85,8 +85,9 @@ printFile ::
   FilePath
   -> Chars
   -> IO ()
-printFile =
-  error "todo: Course.FileIO#printFile"
+printFile filePath chars =
+  putStrLn filePath >>= \_ ->
+    putStrLn chars
 
 -- Given a list of (file name and file contents), print each.
 -- Use @printFile@.
