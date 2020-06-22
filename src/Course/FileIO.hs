@@ -127,7 +127,7 @@ run filePath =
 main ::
   IO ()
 main =
-  error "todo: Course.FileIO#main"
+  getArgs >>= \args -> foldLeft (\b a -> run a >>= \_ -> void b) (pure ()) args
 
 ----
 
