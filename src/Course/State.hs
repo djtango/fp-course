@@ -128,8 +128,7 @@ instance Monad (State s) where
     -> State s b
   (=<<) f (State a) =
     State (\s -> let (b, t) = a s
-                     (State b') = f b
-                 in  b' t)
+                 in runState (f b) t)
 
 -- | Find the first element in a `List` that satisfies a given predicate.
 -- It is possible that no element is found, hence an `Optional` result.
