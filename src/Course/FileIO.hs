@@ -93,7 +93,7 @@ printFile filePath chars =
 printFiles ::
   List (FilePath, Chars)
   -> IO ()
-printFiles xs =
+printFiles =
   void . sequence . (<$>) (uncurry printFile)
   -- (void . sequence) $ (uncurry printFile) <$> xs
 
@@ -102,8 +102,11 @@ printFiles xs =
 getFile ::
   FilePath
   -> IO (FilePath, Chars)
-getFile filePath =
-  readFile filePath >>= \xs -> pure (filePath, xs)
+getFile x =
+  (lift2 (<$>) (,) readFile) x
+  -- ((<$>) <$> (,) <*> readFile) x -- LOL
+  -- ((<$>) . (,)) x (readFile x)
+  -- (,) x <$> readFile x
 
 -- Given a list of file names, return list of (file name and file contents).
 -- Use @getFile@.
