@@ -114,7 +114,7 @@ getFiles ::
   List FilePath
   -> IO (List (FilePath, Chars))
 getFiles files =
-  sequence $ map getFile files
+  sequence $ getFile <$> files
 
 -- Given a file name, read it and for each line in that file, read and print contents of each.
 -- Use @getFiles@, @lines@, and @printFiles@.
