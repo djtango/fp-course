@@ -149,8 +149,38 @@ findM ::
   (a -> f Bool)
   -> List a
   -> f (Optional a)
-findM =
-  error "todo: Course.State#findM"
+--
+-- findM _ Nil = pure Empty
+-- findM p (x :. xs) =
+--   let -- bool -> Optional a
+--       makeResult a fb = if fb then (Full a) else (Empty)
+--       -- iter acc ys =
+--       --   case ys of
+--       --     Nil -> acc -- >>= (\_ -> (p Nil) >>= const $ pure Empty)
+--       --     (z :. zs) ->
+--       --       acc >>= (\optA ->
+--       --         case optA of
+--       --         (Full _) -> acc
+--       --         Empty -> iter ((makeResult z) <$> (p z)) zs)
+--
+--
+--       iter acc ys =
+--         acc >>= (\optA ->
+--             case optA of
+--               (Full _) -> acc
+--               Empty ->
+--                 case ys of
+--                   Nil -> acc
+--                   (z :. zs) -> iter ((makeResult z) <$> (p z)) zs)
+--   in iter ((makeResult x) <$> (p x)) xs
+
+findM _ Nil = pure Empty
+findM p (x :xs) =
+  let makeResult a fb = if fb then (Full a) else (Empty)
+  in (makeResult x) <$> (p x) >>= (\optA
+    case optA of
+      (Full a) -> a
+      Empty -> findM p xs)
 
 -- | Find the first element in a `List` that repeats.
 -- It is possible that no element repeats, hence an `Optional` result.
