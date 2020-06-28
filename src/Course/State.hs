@@ -152,8 +152,8 @@ findM ::
 
 findM _ Nil = pure Empty
 findM p (x :. xs) =
-  (p x) >>= (\bool ->
-    if bool then pure (Full x) else findM p xs)
+  (p x) >>= (\abool ->
+    if abool then pure (Full x) else findM p xs)
 
 -- | Find the first element in a `List` that repeats.
 -- It is possible that no element repeats, hence an `Optional` result.
@@ -166,8 +166,9 @@ firstRepeat ::
   Ord a =>
   List a
   -> Optional a
-firstRepeat =
-  error "todo: Course.State#firstRepeat"
+firstRepeat xs =
+  let p x = (\s -> (const $ pure (s == (S.insert x s))) =<< put (S.insert x s)) =<< get
+  in eval (findM p xs) S.empty
 
 -- | Remove all duplicate elements in a `List`.
 -- /Tip:/ Use `filtering` and `State` with a @Data.Set#Set@.
