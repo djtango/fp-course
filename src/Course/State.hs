@@ -13,6 +13,7 @@ import Course.Functor
 import Course.Applicative
 import Course.Monad
 import qualified Data.Set as S
+import qualified Data.Char as C
 
 -- $setup
 -- >>> import Test.QuickCheck.Function
@@ -180,8 +181,9 @@ distinct ::
   Ord a =>
   List a
   -> List a
-distinct =
-  error "todo: Course.State#distinct"
+distinct xs =
+  let p x = (\s -> (const $ pure (S.notMember x s)) =<< put (S.insert x s)) =<< get
+  in (eval $ filtering p xs) S.empty
 
 -- | A happy number is a positive integer, where the sum of the square of its digits eventually reaches 1 after repetition.
 -- In contrast, a sad number (not a happy number) is where the sum of the square of its digits never reaches 1
@@ -208,4 +210,8 @@ isHappy ::
   Integer
   -> Bool
 isHappy =
-  error "todo: Course.State#isHappy"
+  let toDigits = ((<$>) C.digitToInt) . show'
+      squares = (<$>) (join (*))
+      f = (toInteger . sum) . squares . toDigits
+  in
+    contains 1 . firstRepeat . (produce f)
